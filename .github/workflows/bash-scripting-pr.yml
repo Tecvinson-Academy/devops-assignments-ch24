@@ -67,9 +67,9 @@ jobs:
           done
 
       - name: Approve Pull Request
-        if: ${{ success() }}
-        uses: peter-evans/approve-pull-request@v5
+        id: auto-approve-pr
+        uses: alteryx/auto-approve-pr@v1
         with:
-          github-token: ${{ secrets.PAT_TOKEN }}
-          pull-request-number: ${{ github.event.pull_request.number }}
-          message: 'Automatically approved after passing tests.'
+          repository: ${{ github.repository }}
+          assignee: 'TecVinsonBot'
+          github-token: ${{ secrets.GITHUB_TOKEN }}
