@@ -67,9 +67,7 @@ jobs:
           done
 
       - name: Approve Pull Request
-        id: auto-approve-pr
-        uses: alteryx/auto-approve-pr@v1
+        uses: juliangruber/approve-pull-request-action@v2.0.6
         with:
-          repository: ${{ github.repository }}
-          assignee: 'TecVinsonBot'
           github-token: ${{ secrets.GITHUB_TOKEN }}
+          number: ${{ github.event.pull_request.number }}
