@@ -28,20 +28,26 @@ jobs:
           ref: ${{ github.event.pull_request.head.sha }}
 
       - name: Get list of changed files
-        id: changed_files
+        id: filter
         uses: dorny/paths-filter@v2
         with:
           filters: |
             scripts:
               - '**.sh'
 
+      - name: Debug scripts output
+        shell: bash
+        run: |
+          echo "Scripts to lint: ${{ steps.filter.outputs.scripts }}"
+
       - name: Install ShellCheck
+        shell: bash
         run: sudo apt-get update && sudo apt-get install -y shellcheck
 
       - name: Lint the scripts with ShellCheck
-        if: ${{ steps.changed_files.outputs.scripts != '' }}
+        if: ${{ steps.filter.outputs.scripts == 'true' }}
         run: |
-          echo "${{ steps.changed_files.outputs.scripts }}" | tr ' ' '\n' | while read file; do
+          for file in ${{ steps.filter.outputs.scripts }}; do
             echo "Running ShellCheck on $file"
             shellcheck "$file"
           done
@@ -50,9 +56,9 @@ jobs:
         run: docker pull ubuntu:20.04
 
       - name: Execute the scripts in Docker
-        if: ${{ steps.changed_files.outputs.scripts != '' }}
+        if: ${{ steps.filter.outputs.scripts == 'true' }}
         run: |
-          echo "${{ steps.changed_files.outputs.scripts }}" | tr ' ' '\n' | while read file; do
+          echo "${{ steps.filter.outputs.scripts  }}" | tr ' ' '\n' | while read file; do
             echo "Executing $file in Docker"
             docker run --rm \
               -v "${{ github.workspace }}":/workspace \
@@ -67,6 +73,7 @@ jobs:
           done
 
       - name: Approve Pull Request
+        if: ${{ steps.filter.outputs.scripts == 'true' && success() }}
         uses: juliangruber/approve-pull-request-action@v2.0.6
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
