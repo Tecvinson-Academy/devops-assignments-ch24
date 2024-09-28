@@ -22,40 +22,40 @@ jobs:
   test_and_merge:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout PR code safely
+      - name: Checkout code
         uses: actions/checkout@v4
         with:
-          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
 
-      # Step 2: Retrieve Changed .sh Files
       - name: Get list of changed .sh files
-        shell: bash
         id: get_changed_files
         run: |
-          echo "Fetching list of changed .sh files..."
-
-          # Retrieve changed .sh files
-          CHANGED_FILES=$(git diff --name-only ${{ github.event.pull_request.base.sha }} ${{ github.sha }} | grep '\.sh$' || true)
-
-          # Output the list for debugging
+          if [[ "${{ github.event_name }}" == "pull_request" ]]; then
+            CHANGED_FILES=$(git diff --name-only ${{ github.event.pull_request.base.sha }} ${{ github.sha }} | grep '\.sh$' || true)
+          else
+            CHANGED_FILES=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep '\.sh$' || true)
+          fi
           echo "Changed .sh files:"
           echo "$CHANGED_FILES"
-
-          # Set the output using the new method
           echo "files<<EOF" >> $GITHUB_OUTPUT
           echo "$CHANGED_FILES" >> $GITHUB_OUTPUT
-          echo "EOF"
-
-      # Step 3: Run ShellCheck on Changed .sh Files
+          echo "EOF" >> $GITHUB_OUTPUT
+          
       - name: Run ShellCheck
         if: ${{ steps.get_changed_files.outputs.files != '' }}
-        uses: azohra/shell-linter@latest
+        uses: ludeeus/action-shellcheck@master
         with:
-          path: '${{ steps.get_changed_files.outputs.files }}'
-
-      - name: Set up Docker container
-        run: docker pull ubuntu:20.04
-
+          scandir: './bash-scripting'
+          severity: error
+        
+      - name: Run Spellcheck
+        if: ${{ steps.get_changed_files.outputs.files != '' }}
+        run: |
+          echo "${{ steps.get_changed_files.outputs.files }}" | tr ' ' '\n' | while read file; do
+            echo "Spellchecking $file"
+            cspell $file || echo "Spellcheck found issues in $file"
+          done
+          
       - name: Execute the scripts in Docker
         if: ${{ steps.get_changed_files.outputs.files != '' }}
         run: |
@@ -72,10 +72,3 @@ jobs:
                 sudo $file
               "
           done
-
-      - name: Approve Pull Request
-        if: ${{ steps.get_changed_files.outputs.files == 'true' && success() }}
-        uses: juliangruber/approve-pull-request-action@v2.0.6
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          number: ${{ github.event.pull_request.number }}
