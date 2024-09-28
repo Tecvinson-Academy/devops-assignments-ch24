@@ -27,38 +27,39 @@ jobs:
         with:
           ref: ${{ github.event.pull_request.head.sha }}
 
-      - name: Get list of changed files
-        id: filter
-        uses: dorny/paths-filter@v2
+      # Step 2: Retrieve Changed .sh Files
+      - name: Get list of changed .sh files
+        shell: bash
+        id: get_changed_files
+        run: |
+          echo "Fetching list of changed .sh files..."
+
+          # Retrieve changed .sh files
+          CHANGED_FILES=$(git diff --name-only ${{ github.event.pull_request.base.sha }} ${{ github.sha }} | grep '\.sh$' || true)
+
+          # Output the list for debugging
+          echo "Changed .sh files:"
+          echo "$CHANGED_FILES"
+
+          # Set the output using the new method
+          echo "files<<EOF" >> $GITHUB_OUTPUT
+          echo "$CHANGED_FILES" >> $GITHUB_OUTPUT
+          echo "EOF"
+
+      # Step 3: Run ShellCheck on Changed .sh Files
+      - name: Run ShellCheck
+        if: ${{ steps.get_changed_files.outputs.files != '' }}
+        uses: azohra/shell-linter@latest
         with:
-          filters: |
-            scripts:
-              - '**.sh'
-
-      - name: Debug scripts output
-        shell: bash
-        run: |
-          echo "Scripts to lint: ${{ steps.filter.outputs.scripts }}"
-
-      - name: Install ShellCheck
-        shell: bash
-        run: sudo apt-get update && sudo apt-get install -y shellcheck
-
-      - name: Lint the scripts with ShellCheck
-        if: ${{ steps.filter.outputs.scripts == 'true' }}
-        run: |
-          for file in ${{ steps.filter.outputs.scripts }}; do
-            echo "Running ShellCheck on $file"
-            shellcheck "$file"
-          done
+          path: '${{ steps.get_changed_files.outputs.files }}'
 
       - name: Set up Docker container
         run: docker pull ubuntu:20.04
 
       - name: Execute the scripts in Docker
-        if: ${{ steps.filter.outputs.scripts == 'true' }}
+        if: ${{ steps.get_changed_files.outputs.files != '' }}
         run: |
-          echo "${{ steps.filter.outputs.scripts  }}" | tr ' ' '\n' | while read file; do
+          echo "${{ steps.get_changed_files.outputs.files }}" | tr ' ' '\n' | while read file; do
             echo "Executing $file in Docker"
             docker run --rm \
               -v "${{ github.workspace }}":/workspace \
@@ -73,7 +74,7 @@ jobs:
           done
 
       - name: Approve Pull Request
-        if: ${{ steps.filter.outputs.scripts == 'true' && success() }}
+        if: ${{ steps.get_changed_files.outputs.files == 'true' && success() }}
         uses: juliangruber/approve-pull-request-action@v2.0.6
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
