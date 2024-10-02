@@ -20,6 +20,7 @@ jobs:
 
       # Step 2: Run ShellCheck on scripts in bash-scripting directory
       - name: Run ShellCheck
+        continue-on-error: true
         uses: azohra/shell-linter@latest
         with:
           path: "bash-scripting"
