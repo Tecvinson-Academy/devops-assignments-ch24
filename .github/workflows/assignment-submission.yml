@@ -32,8 +32,8 @@ jobs:
 
     - name: Commit and Push Changes
       run: |
-        git config --global user.email "tecvinsonbot@tecvinsonacademy.com"
-        git config --global user.name "TecVinsonBot"
+        git config --global user.email "adekunle.lawal@tecvinsonacademy.com"
+        git config --global user.name "lawaladekunle"
         git add README.md
         git commit -m "Updated submission board"
         # Extract the branch name from GITHUB_REF
