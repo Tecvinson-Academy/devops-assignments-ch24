@@ -1,0 +1,45 @@
+name: Update Submission Board
+
+on:
+  push:
+    branches:
+      - main
+permissions:
+  contents: write
+env:
+  PAT_TOKEN: ${{ secrets.GH_TOKEN }}
+  GITHUB_REPOSITORY: ${{ github.repository }}
+  GITHUB_REF: ${{ github.ref }}
+
+jobs:
+  check-submissions:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: 3.x
+
+    - name: Install dependencies
+      run: pip install PyGithub
+
+    - name: Check Submissions
+      run: |
+        python scripts/check_submissions.py
+
+    - name: Commit and Push Changes
+      run: |
+        git config --global user.email "tecvinsonbot@tecvinsonacademy.com"
+        git config --global user.name "TecVinsonBot"
+        git add README.md
+        git commit -m "Updated submission board"
+        # Extract the branch name from GITHUB_REF
+        BRANCH=${GITHUB_REF#refs/heads/}
+        # Set the remote URL with the PAT for authentication
+        git remote set-url origin https://${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git
+        # Push changes to the branch
+        git push origin HEAD:${BRANCH}
+      if: success()
