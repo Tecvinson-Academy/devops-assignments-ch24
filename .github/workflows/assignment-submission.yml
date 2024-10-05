@@ -1,6 +1,8 @@
 name: Update Submission Board
 
 on:
+  schedule:
+    - cron:  '0 0 * * *'  # Runs at midnight every day
   push:
     branches:
       - main
@@ -29,38 +31,10 @@ jobs:
     - name: Check Submissions
       run: |
         python scripts/check_submissions.py
-
-    - name: Commit and Push Changes
-      run: |
-        git config --global user.email "adekunle.lawal@tecvinsonacademy.com"
-        git config --global user.name "lawaladekunle"
-        git add README.md
-        git commit -m "Updated submission board"
-        # Extract the branch name from GITHUB_REF
-        BRANCH=${GITHUB_REF#refs/heads/}
-        # Set the remote URL with the PAT for authentication
-        git remote set-url origin https://${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git
-        # Push changes to the branch
-        git push origin HEAD:${BRANCH}
-      if: success()
-
+        
     - name: Commit and Push Changes
       run: |
         git config --global user.email "tecvinsonbot@tecvinsonacademy.com"
         git config --global user.name "TecVinsonBot"
-        
-        git add README.md
-        git commit -m "Updated submission board" || exit 0
-
-        # Create a new branch name based on the current timestamp
-        BRANCH_NAME="update-submission-$(date +%s)"
-        
-        # Create and switch to the new branch
-        git checkout -b $BRANCH_NAME
-
-        # Push the changes to the new branch
-        git push https://${{ github.actor }}:${{ env.GH_TOKEN }}@github.com/${{ github.repository }}.git $BRANCH_NAME
-
-        # Optionally, create a pull request via GitHub CLI or API
-        gh pr create --title "Automated submission board update" --body "This PR updates the submission board." --base main --head $BRANCH_NAME
+        git diff --exit-code || (git add README.md; git commit -m "Update README"; git push)
       if: success()
