@@ -8,7 +8,7 @@ The folders are arranged based on the topics, ensure you submit the relevant ass
 | Student | bash-scripting | cloud-computing | docker | github-actions | iac | kubernetes | monitoring |
 | ------- | -------- | -------- | -------- | -------- | -------- | -------- | -------- |
 | ade testing | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
-| adeyemi lawal | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
+| adeyemi lawal | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
 | ahmed omoba | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
 | akinwande fernandez | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
 | blessed kemka | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
