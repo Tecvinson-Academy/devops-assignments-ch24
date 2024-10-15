@@ -1,0 +1,26 @@
+services:
+  frontend:
+    build: ./fe  # Front End image building from Docker file
+    container_name: frontend-container  # Container name
+    ports:
+      - "8080:80"  # Expose port 8080 on the host to port 80 in the container
+    volumes:
+      - ./fe/html:/usr/local/apache2/htdocs/ # Mount local 'html' directory to the container
+  backend:
+    build: ./be #Backend image building
+    container_name: backend-container
+    ports:
+      - "5500:5500"
+  db:
+    build: ./db  # MySQL image
+    container_name: mysql-container
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword  # Set MySQL root password
+      MYSQL_DATABASE: tecvinson_registration  # Create a database
+    ports:
+      - "3306:3306"  # Expose port 3306 for MySQL
+    volumes:
+      - C:\Users\malar\devopsassignment\sql_db:/var/lib/mysql  # Store MySQL data in a named volume
+
+
+    
