@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  tv-multi-app-db:
+    build: ./db
+    volumes:
+      - mysql-data:/var/lib/mysql
+    ports:
+      - "3306:3306"
+
+  tv-multi-app-frontend:
+    build: ./fe
+    volumes:
+      - ./fe:/usr/local/apache2/htdocs/
+    ports:
+      - "8080:80"
+
+  tv-multi-app-backend:
+    build: ./be
+    depends_on:
+      - tv-multi-app-db
+    ports:
+      - "5500:5500"
+
+volumes:
+  mysql-data:
