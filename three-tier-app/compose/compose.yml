@@ -1,0 +1,40 @@
+services:
+  front-end:
+    image: spring-bolt-fe:vi  
+    container_name: spring-bolt-fe
+    ports:
+      - "419:80"
+    networks:
+      - spring-network
+
+  back-end:
+    image: spring-bolt-be:vi  
+    container_name: spring-bolt-be
+    ports:
+      - "5500:5500"
+    environment:
+      FLASK_APP: app.py
+      MYSQL_HOST: spring-bolt-db
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: spring_registration
+    networks:
+      - spring-network
+
+  database:
+    image: spring-bolt-db:vi  
+    container_name: spring-bolt-db
+    ports:
+      - "3306:3306"
+    networks:
+      - spring-network
+    volumes:
+      - "sql_data:/var/lib/mysql"
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: tecvinson_registration
+
+networks:
+  spring-network:
+
+volumes:
+  sql_data:
