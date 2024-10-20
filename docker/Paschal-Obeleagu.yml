@@ -1,0 +1,33 @@
+
+
+services:
+  tv-multi-app-frontend:
+    build: ./fe
+    ports: 
+      - 8088:80
+    networks:
+      - dps01-s3
+
+  tv-multi-app-backend:
+    build: ./be
+    depends_on:
+      - tv-multi-app-db
+    ports:
+      - "5500:5500"
+    networks:
+      - dps01-s3
+
+  tv-multi-app-db:
+    build: ./db
+    volumes:
+      - mysql-data:/var/lib/mysql
+    ports:
+      - "3308:3306"
+    networks:
+      - dps01-s3
+
+networks:
+  dps01-s3: {}
+
+volumes:
+  mysql-data:
