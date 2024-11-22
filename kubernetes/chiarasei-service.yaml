@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: multi-container-service
+  namespace: chiara-sei
+  labels:
+    app: multi-container-app
+    service-type: external
+  annotations:
+    description: "Exposes the multi-container deployment externally"
+spec:
+  type: NodePort
+  selector:
+    app: multi-container-app
+  ports:
+  - port: 80
+    targetPort: 80
+    nodePort: 32000 
+ # You can choose any port in the range 30000-32767

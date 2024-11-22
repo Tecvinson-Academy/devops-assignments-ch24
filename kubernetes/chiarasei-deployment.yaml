@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: multi-container-deployment
+  namespace: chiara-sei
+  labels:
+    app: multi-container-app
+spec:
+  selector:
+    matchLabels:
+      app: multi-container-app
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: multi-container-app
+    spec:
+      containers:
+      - name: multi-app-container
+        image: nginx:1.21
+        ports:
+        - containerPort: 80
+        env:
+        - name: APP_ENV
+          value: "production"
+      - name: sidecar-container
+        image: busybox
+        command:  ["/bin/sh", "-c", "sleep infinity"]
