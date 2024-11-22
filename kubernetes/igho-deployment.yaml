@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: multi-container-deployment
+  namespace: igho                            # Specify the namespace here
+  labels:
+    app: multi-container-app
+    environment: production
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: multi-container-app
+      environment: production
+  template:
+    metadata:
+      labels:
+        app: multi-container-app
+        environment: production
+    spec:
+      containers:
+        - name: app-container
+          image: nginx:1.21
+          ports:
+            - containerPort: 80
+          env:
+            - name: APP_ENV
+              value: "production"
+
+        - name: sidecar-container
+          image: busybox
+          command: ["/bin/sh", "-c", "sleep infinity"]
