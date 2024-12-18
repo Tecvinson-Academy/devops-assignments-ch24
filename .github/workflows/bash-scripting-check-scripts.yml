@@ -2,9 +2,6 @@ name: ShellCheck Linting
 
 # Define the triggers for the workflow
 on:
-  push:
-    branches:
-      - main
   workflow_dispatch:
 
 # Define the jobs to be run
