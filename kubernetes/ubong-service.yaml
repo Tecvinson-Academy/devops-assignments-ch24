@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: multi-container-service
+  namespace: ubong
+  labels:
+    app: multi-container-app
+    service-type: external
+  annotations:
+    description: "Exposes the multi-container deployment externally"
+  spec:
+   type: NodePort
+   label: 
+   - app: multi-container-app
+   - service-type: external
+   selector:
+    app: multi-container-app
+   ports:
+    protocol: TCP
+    port: 80
+    targetPort: 80
+    NodePort: 32000
