@@ -18,18 +18,18 @@ The folders are arranged based on the topics, ensure you submit the relevant ass
 | hassan oyekunle | ✅ | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ |
 | igho igbini | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
 | ifedayo osideinde | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
-| joseph adeniyi | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
+| joseph adeniyi | ✅ | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ |
 | judah frank | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
 | kelvin ogedengbe | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
 | luke nkereawaji | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
-| malarvizhi raju | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
+| malarvizhi raju | ✅ | ❌ | ❌ | ❌ | ❌ | ✅ | ❌ |
 | michelle obiorah | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
 | monica inweh | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
-| oladipupo olaniyan | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
+| oladipupo olaniyan | ✅ | ❌ | ✅ | ✅ | ❌ | ❌ | ❌ |
 | oluwole precious | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
 | otu valery | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
 | paschal obeleagu | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
 | rasheedat mustapha | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
-| ubong inyang | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
+| ubong inyang | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
 
 <!-- SUBMISSION BOARD END -->
